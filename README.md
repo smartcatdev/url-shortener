@@ -1,4 +1,4 @@
-# robot
+# Url Shortener - VueJS
 
 ## Project setup
 ```
