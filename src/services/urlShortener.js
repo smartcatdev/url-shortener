@@ -51,7 +51,7 @@ export default class urlShortener{
         if (storedHashes.length !== 0) {
             for (let [storedHash, url] of storedHashes) {
                 if (hash == storedHash) {
-                    result = true
+                    return true
                 }
             }
         } 
