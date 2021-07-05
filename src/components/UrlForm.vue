@@ -1,12 +1,12 @@
 <template>
-    <b-container>
+    <!-- <b-container>
         <b-row>
-            <b-col>
-                <b-alert show v-if="form.error" variant="danger">Please enter a valid URL</b-alert>
-                <b-alert show v-if="form.shortUrl" variant="info">{{ form.shortUrl }}</b-alert>
+            <b-col> -->
+
 
                 <b-form @submit="submit" @reset="reset">
-
+                    <b-alert class="alert-error" show v-if="form.error" variant="danger">Please enter a valid URL</b-alert>
+                    <b-alert show v-if="form.shortUrl" variant="info">{{ form.shortUrl }}</b-alert>
                     <b-form-group
                         id="user-url-group"
                         label="Original URL"
@@ -14,8 +14,9 @@
                     >
                         <b-form-input
                             id="user-url"
-                            type="url"
+                            type="text"
                             placeholder="Enter your URL"
+                            data-test-id="urlform-userurl"
                             v-model="form.userUrl"
                             required
                         ></b-form-input>
@@ -23,13 +24,13 @@
                     
                     <div class="buttons">
                         <b-button class="button" type="reset" variant="danger">Reset</b-button>
-                        <b-button class="button" type="submit" variant="primary">Shorten URL</b-button>
+                        <b-button class="button submit" type="submit" variant="primary">Shorten URL</b-button>
                     </div>
 
                 </b-form>
-            </b-col>
+            <!-- </b-col>
         </b-row>
-    </b-container>
+    </b-container> -->
 
 </template>
 
@@ -43,7 +44,7 @@ export default {
         return {
             form: {
                 error: false,
-                userUrl: 'https://shopify.ca',
+                userUrl: '',
                 shortUrl: '',
             }
         }
@@ -60,11 +61,19 @@ export default {
         },
         submit(e) {
             e.preventDefault()
+            this.form.error = false
 
-            // console.log(urlShortener.shortenUrl(this.form.userUrl))
+            if (this.validateUrl(this.form.userUrl)  === false) {    
+                this.form.error = true
+                return false
+            }
+
             const url = new urlShortener(this.form.userUrl)
             this.form.shortUrl = url.getShortUrl()
-
+            this.$emit('formSubmitted', {
+                url: this.form.userUrl
+            })
+            return true
         },
         reset(e) {
             e.preventDefault()

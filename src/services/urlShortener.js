@@ -30,9 +30,10 @@ export default class urlShortener{
         let hash = this._getHash()
         if (this._hashExists(hash)) {
             this._createUrl()
+        } else {
+            this._storeHash(hash)
         }
 
-        this._storeHash(hash)
         return this.defaultUrl + hash
     }
     
@@ -51,6 +52,7 @@ export default class urlShortener{
         if (storedHashes.length !== 0) {
             for (let [storedHash, url] of storedHashes) {
                 if (hash == storedHash) {
+                    console.log(hash)
                     return true
                 }
             }
